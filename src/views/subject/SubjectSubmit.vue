@@ -1,33 +1,36 @@
 <template>
   <div class="app-wrapper">
-    <div style="float: left;width: 47%;">
-        <p> {{ $route.params.subjectId }}. {{ getSubjectData($route.params.subjectId).name }}</p>
-        <div class= "subjectContent" style="background: #EBEBEB;border: 2px solid #AAAAAA;margin-top:30px;">
-            <p style="text-indent: 2;">{{ getSubjectData($route.params.subjectId).content }}
+    <div class="main-left subject">
+        <p class="subject_name"> {{ $route.params.subjectId }}. {{ subjectData.name }}</p>
+        <div class= "subject_content">
+            <p>{{ subjectData.content }}
             </p>
-
         </div>
     </div>
 
-    <div style="float: right;width: 47%;margin: 2%;text-align: center;">
-        <div style="height: 80px;overflow: auto;background: #EBEBEB;border: 2px solid #AAAAAA;">
+    <div class="main-right record">
+        <div class="record_controller">
             录音controller
         </div>
 
-        <div style="height: 240px;overflow: auto;margin-top: 30px;background: #EBEBEB;border: 2px solid #AAAAAA;">
+        <div class="record_text_component">
             录音文本组件区域
         </div>
 
-        <el-button type="info" style="margin-top: 10px;" @click="publish">发布</el-button>
+        <el-button class="record_btn_publish" type="info" @click="publish">发布</el-button>
     </div>
 
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'index',
+  data () {
+    return {
+      subjectData: {}
+    }
+  },
   components: {
 
   },
@@ -50,14 +53,50 @@ export default {
       console.log('发布成功')
     }
   },
-  mounted () {
+  async mounted () {
+    this.subjectData = this.getSubjectData(this.$route.params.subjectId)
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .app-wrapper {
-        margin-top: 10px;
-        overflow: scroll;
+    .main-left {
+        float: left;
+        width: 47%;
     }
+
+    .subject {
+        .subject_content {
+            background: #EBEBEB;
+            border: 2px solid #AAA;
+            margin-top:30px;
+        }
+    }
+
+    .main-right {
+      float: right;
+      width: 47%;
+      margin: 2%;
+    }
+
+    .record {
+      text-align: center;
+        .record_controller {
+          height: 80px;
+          overflow: auto;
+          background: #EBEBEB;
+          border: 2px solid #AAA;
+        }
+        .record_text_component {
+          height: 240px;
+          overflow: auto;
+          margin-top: 30px;
+          background: #EBEBEB;
+          border: 2px solid #AAA;
+        }
+        .record_btn_publish {
+          margin-top: 10px;
+        }
+    }
+
 </style>
