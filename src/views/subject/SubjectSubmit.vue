@@ -61,16 +61,11 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
     .app-wrapper {
       margin-top: 5px;
-      display: -webkit-flex;
-      display: -moz-flex;
-      display: -ms-flex;
-      display: -o-flex;
       display: flex;
-      justify-content: space-around;
     }
 
     .main-left {
-      width: 47%;
+      width: 360px;
       .subject-content {
         background: #EBEBEB;
         border: 2px solid #AAA;
@@ -79,8 +74,9 @@ export default {
     }
 
     .main-right {
-      width: 47%;
+      flex: 1;
       text-align: center;
+      padding: 10px;
       .record-controller {
         height: 80px;
         overflow: auto;
