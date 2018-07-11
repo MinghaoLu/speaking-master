@@ -16,7 +16,7 @@
         录音文本组件区域
       </div>
 
-      <el-button class="record-btn-publish" type="info" @click="publish">发布</el-button>
+      <el-button class="record-btn-publish" type="info" @click="publish($route.params.subjectId)">发布</el-button>
     </div>
 
   </div>
@@ -36,24 +36,28 @@ export default {
   computed: {},
   methods: {
     getSubjectData (subjectId) {
-      return {
-        id: 1,
-        name: 'Most attractive theme of children museum exhibition',
-        content: 'What the fuck is that you are a fucking doubi',
-        tags: [
-          'Toefl',
-          'one of three',
-          'task 1'
-        ],
-        paticipants: 12
-      }
+      this.$ajax.get('http://localhost:8800/api/subjects/' + subjectId)
+        .then((result) => {
+          console.log('successful')
+          console.log(result)
+          console.log(result.status)
+          this.subjectData = result.data
+        }).catch((err) => {
+          console.log(err)
+        })
     },
-    publish () {
+    publish (subjectId) {
       console.log('发布成功')
+      this.$ajax.post('http://localhost:8800/api/subjects/' + subjectId + 'submissions', {
+      })
+        .then((response) => {
+        }).catch((error) => {
+          console.log(error)
+        })
     }
   },
-  async mounted () {
-    this.subjectData = this.getSubjectData(this.$route.params.subjectId)
+  mounted () {
+    this.getSubjectData(this.$route.params.subjectId)
   }
 }
 </script>
@@ -65,7 +69,8 @@ export default {
     }
 
     .main-left {
-      width: 360px;
+      flex: 50%;
+      padding: 10px;
       .subject-content {
         background: #EBEBEB;
         border: 2px solid #AAA;
@@ -74,9 +79,9 @@ export default {
     }
 
     .main-right {
-      flex: 1;
-      text-align: center;
+      flex: 50%;
       padding: 10px;
+      text-align: center;
       .record-controller {
         height: 80px;
         overflow: auto;
