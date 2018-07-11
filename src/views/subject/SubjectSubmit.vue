@@ -17,6 +17,7 @@
       </div>
 
       <el-button class="record-btn-publish" type="info" @click="publish($route.params.subjectId)">发布</el-button>
+
     </div>
 
   </div>
@@ -78,6 +79,7 @@ export default {
         console.log(error)
       })
   }
+
 }
 </script>
 
@@ -90,6 +92,7 @@ export default {
     .main-left {
       flex: 50%;
       padding: 10px;
+      width: 360px;
       .subject-content {
         background: #EBEBEB;
         border: 2px solid #AAA;
