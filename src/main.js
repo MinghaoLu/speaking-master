@@ -14,12 +14,10 @@ import 'nprogress/nprogress.css' // Progress 进度条 样式
 import 'normalize.css/normalize.css' // normalize.css 样式格式化
 import * as filters from './filters' // 全局vue filter
 import IconSvg from 'components/IconSvg' // svg 组件
-import axios from 'axios' // 异步请求
 
 // register globally
 Vue.component('icon-svg', IconSvg)
 Vue.use(ElementUI)
-Vue.prototype.$ajax = axios
 
 // register global utility filters.
 /* eslint import/namespace: ['error', { allowComputed: true }] */

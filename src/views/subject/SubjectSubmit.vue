@@ -23,6 +23,29 @@
 </template>
 
 <script>
+import axios from 'axios' // 异步请求HTTP库
+
+// 创建axios实例
+const service = axios.create({
+  baseURL: 'http://localhost:8800/api', // api的base_url
+  timeout: 5000 // 请求超时时间
+})
+
+// request拦截器
+service.interceptors.request.use(config => {
+  console.log(config)
+  return config
+}, error => {
+  Promise.reject(error)
+})
+
+// response拦截器
+service.interceptors.response.use(response => {
+  return response.data
+}, error => {
+  Promise.reject(error)
+})
+
 export default {
   name: 'index',
   data () {
@@ -36,22 +59,23 @@ export default {
   computed: {},
   methods: {
     getSubjectData (subjectId) {
-      this.$ajax.get('http://localhost:8800/api/subjects/' + subjectId)
+      service.get('/subjects/' + subjectId)
         .then((result) => {
           console.log('successful')
           console.log(result)
-          console.log(result.status)
-          this.subjectData = result.data
-        }).catch((err) => {
+          this.subjectData = result
+        })
+        .catch((err) => {
           console.log(err)
         })
     },
     publish (subjectId) {
       console.log('发布成功')
-      this.$ajax.post('http://localhost:8800/api/subjects/' + subjectId + '/submissions', {
+      service.post('/subjects/' + subjectId + '/submissions', {
       })
         .then((response) => {
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.log(error)
         })
     }
