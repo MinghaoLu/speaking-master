@@ -48,7 +48,7 @@ export default {
     },
     publish (subjectId) {
       console.log('发布成功')
-      this.$ajax.post('http://localhost:8800/api/subjects/' + subjectId + 'submissions', {
+      this.$ajax.post('http://localhost:8800/api/subjects/' + subjectId + '/submissions', {
       })
         .then((response) => {
         }).catch((error) => {
