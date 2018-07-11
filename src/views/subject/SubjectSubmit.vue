@@ -23,28 +23,7 @@
 </template>
 
 <script>
-import axios from 'axios' // 异步请求HTTP库
-
-// 创建axios实例
-const service = axios.create({
-  baseURL: 'http://localhost:8800/api', // api的base_url
-  timeout: 5000 // 请求超时时间
-})
-
-// request拦截器
-service.interceptors.request.use(config => {
-  console.log(config)
-  return config
-}, error => {
-  Promise.reject(error)
-})
-
-// response拦截器
-service.interceptors.response.use(response => {
-  return response.data
-}, error => {
-  Promise.reject(error)
-})
+import fetch from 'utils/fetch'
 
 export default {
   name: 'index',
@@ -59,29 +38,45 @@ export default {
   computed: {},
   methods: {
     getSubjectData (subjectId) {
-      service.get('/subjects/' + subjectId)
-        .then((result) => {
-          console.log('successful')
-          console.log(result)
-          this.subjectData = result
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      console.log('getSubjectData')
+      let result = fetch({
+        url: `/subjects/${subjectId}`,
+        method: 'get'
+      })
+      console.log(result)
+      return result
     },
     publish (subjectId) {
       console.log('发布成功')
-      service.post('/subjects/' + subjectId + '/submissions', {
+      return fetch({
+        url: `/subjects/${subjectId}/submissions`,
+        method: 'post',
+        data: {
+
+        },
+        transformRequest: [function (data) {
+          // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(response => {
+
+      }, error => {
+        console.log(error)
       })
-        .then((response) => {
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   },
   mounted () {
     this.getSubjectData(this.$route.params.subjectId)
+      .then(response => {
+        this.subjectData = response
+      }, error => {
+        console.log(error)
+      })
   }
 }
 </script>
