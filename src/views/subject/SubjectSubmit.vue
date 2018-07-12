@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import fetch from 'utils/fetch'
+import { getSubjectById, publishSubmission } from 'api/subjects'
 
 export default {
   name: 'index',
@@ -38,46 +38,15 @@ export default {
   },
   computed: {},
   methods: {
-    getSubjectData (subjectId) {
-      console.log('getSubjectData')
-      let result = fetch({
-        url: `/subjects/${subjectId}`,
-        method: 'get'
-      })
-      console.log(result)
-      return result
-    },
-    publish (subjectId) {
-      console.log('发布成功')
-      return fetch({
-        url: `/subjects/${subjectId}/submissions`,
-        method: 'post',
-        data: {
-
-        },
-        transformRequest: [function (data) {
-          // Do whatever you want to transform the data
-          let ret = ''
-          for (let it in data) {
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-          }
-          return ret
-        }],
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      }).then(response => {
-
-      }, error => {
-        console.log(error)
+    publish () {
+      publishSubmission(this.$route.params.subjectId, {
+        content: 'test',
+        audioUrl: 'test'
       })
     }
   },
-  mounted () {
-    this.getSubjectData(this.$route.params.subjectId)
-      .then(response => {
-        this.subjectData = response
-      }, error => {
-        console.log(error)
-      })
+  async mounted () {
+    this.subjectData = await getSubjectById(this.$route.params.subjectId)
   }
 
 }
