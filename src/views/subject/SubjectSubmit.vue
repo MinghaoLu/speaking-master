@@ -30,7 +30,8 @@ export default {
   name: 'index',
   data () {
     return {
-      subjectData: {}
+      subjectData: {},
+      audio_url: ''
     }
   },
   components: {
@@ -39,10 +40,17 @@ export default {
   computed: {},
   methods: {
     publish () {
+      console.log('publish')
       publishSubmission(this.$route.params.subjectId, {
         content: 'test',
         audioUrl: 'test'
       })
+        .then(response => {
+          this.audio_url = response.audio_url
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   async mounted () {
