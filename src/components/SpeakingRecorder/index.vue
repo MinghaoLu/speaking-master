@@ -20,8 +20,7 @@ export default {
   },
   data () {
     return {
-      recorder: null,
-      audio_url: ''
+      recorder: null
     }
   },
   computed: {
@@ -48,18 +47,24 @@ export default {
   },
   methods: {
     startRecording () {
+      this.$refs.recordBtn.disabled = 'disabled'
+      this.$refs.stopBtn.disabled = null
       this.recorder && this.recorder.record()
       // this.$refs['recordBtn'].disabled = true
       // this.$refs['recordBtn'].nextElementSibling.disabled = false
       console.log('Recording...')
     },
     stopRecording (button) {
+      this.$refs.recordBtn.disabled = null
+      this.$refs.stopBtn.disabled = 'disabled'
       this.recorder && this.recorder.stop()
       // this.$refs['stopBtn'].disabled = true
       // this.$refs['stopBtn'].previousElementSibling.disabled = false
       console.log('Stopped recording.')
+      this.createDownloadLink()
     },
     createDownloadLink () {
+      let _self = this
       this.recorder && this.recorder.exportWAV(function (blob) {
         var url = URL.createObjectURL(blob)
         var li = document.createElement('li')
@@ -74,6 +79,9 @@ export default {
         li.appendChild(au)
         li.appendChild(hf)
         document.getElementById('recordingslist').appendChild(li)
+        // upload the record to the server
+        let record = new File([blob], hf.download)
+        _self.uploadRecord(record)
       })
     },
     startUserMedia (stream) {
@@ -86,9 +94,10 @@ export default {
     },
     // upload the record to the server and return audio_rul
     uploadRecord: function (record) {
+      console.log('uploadRecord')
       uploadFile(this.$route.params.subjectId, record)
         .then(response => {
-          this.audio_url = response.audio_url
+          this.$emit('get-audio-url', response.audio_url)
         })
         .catch(error => {
           console.log(error)

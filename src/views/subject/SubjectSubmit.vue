@@ -9,7 +9,7 @@
 
     <div class="main-right">
       <div class="record-controller">
-          <recorder></recorder>
+          <recorder v-on:get-audio-url="getAudioUrl" ></recorder>
       </div>
 
       <div class="record-text-component">
@@ -41,10 +41,15 @@ export default {
   computed: {},
   methods: {
     publish () {
+      console.log('publish')
       publishSubmission(this.$route.params.subjectId, {
-        content: 'test',
-        audioUrl: 'test'
+        content: this.subjectData.content,
+        audioUrl: this.audio_url
       })
+    },
+    getAudioUrl: function (url) {
+      console.log('getAudioUrl:' + url)
+      this.audio_url = url
     }
   },
   async mounted () {
@@ -75,11 +80,6 @@ export default {
       flex: 1;
       padding: 10px;
       text-align: center;
-      .record-controller {
-        /* overflow: auto;
-        background: #EBEBEB;
-        border: 2px solid #AAA; */
-      }
       .record-text-component {
         height: 240px;
         overflow: auto;
