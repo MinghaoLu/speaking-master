@@ -9,7 +9,7 @@
 
     <div class="main-right">
       <div class="record-controller">
-          <recorder v-on:get-audio-url="getAudioUrl" ></recorder>
+          <recorder v-on:get-audio="getAudio" ></recorder>
       </div>
 
       <div class="record-text-component">
@@ -25,7 +25,7 @@
 
 <script>
 import Recorder from '@/components/SpeakingRecorder'
-import { getSubjectById, publishSubmission } from 'api/subjects'
+import { getSubjectById, publishSubmission, uploadFile } from 'api/subjects'
 
 export default {
   name: 'index',
@@ -47,9 +47,21 @@ export default {
         audioUrl: this.audio_url
       })
     },
-    getAudioUrl: function (url) {
-      console.log('getAudioUrl:' + url)
-      this.audio_url = url
+    getAudio: function (blob, fileName) {
+      console.log('getAudio:' + blob)
+      let record = new File([blob], fileName)
+      this.uploadRecord(record)
+    },
+    // upload the record to the server and return audio_rul
+    uploadRecord: function (record) {
+      console.log('uploadRecord')
+      uploadFile(this.$route.params.subjectId, record)
+        .then(response => {
+          this.audio_url = response.audioUrl
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   async mounted () {

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button ref="recordBtn" @click="startRecording">record</button>
-    <button ref="stopBtn" @click="stopRecording" disabled>stop</button>
+    <button ref="recordBtn" id="btnStart" @click="startRecording">record</button>
+    <button ref="stopBtn" id="btnStop" @click="stopRecording" disabled>stop</button>
 
     <h2>Recordings</h2>
     <ul id="recordings-list">
@@ -12,7 +12,7 @@
 
 <script>
 import Recorder from './recorder.js'
-import { uploadFile } from 'api/subjects'
+
 export default {
   name: 'recorder',
   props: {
@@ -47,16 +47,16 @@ export default {
   },
   methods: {
     startRecording () {
-      this.$refs.recordBtn.disabled = 'disabled'
-      this.$refs.stopBtn.disabled = null
+      document.getElementById('btnStart').setAttribute('disabled', 'disabled')
+      document.getElementById('btnStop').removeAttribute('disabled')
       this.recorder && this.recorder.record()
       // this.$refs['recordBtn'].disabled = true
       // this.$refs['recordBtn'].nextElementSibling.disabled = false
       console.log('Recording...')
     },
     stopRecording (button) {
-      this.$refs.recordBtn.disabled = null
-      this.$refs.stopBtn.disabled = 'disabled'
+      document.getElementById('btnStart').removeAttribute('disabled')
+      document.getElementById('btnStop').setAttribute('disabled', 'disabled')
       this.recorder && this.recorder.stop()
       // this.$refs['stopBtn'].disabled = true
       // this.$refs['stopBtn'].previousElementSibling.disabled = false
@@ -79,9 +79,9 @@ export default {
         li.appendChild(au)
         li.appendChild(hf)
         document.getElementById('recordingslist').appendChild(li)
-        // upload the record to the server
-        let record = new File([blob], hf.download)
-        _self.uploadRecord(record)
+
+        // deliver to parent
+        _self.$emit('get-audio', blob, hf.download)
       })
     },
     startUserMedia (stream) {
@@ -91,19 +91,7 @@ export default {
 
       this.recorder = new Recorder(input)
       console.log('Recorder initialised.')
-    },
-    // upload the record to the server and return audio_rul
-    uploadRecord: function (record) {
-      console.log('uploadRecord')
-      uploadFile(this.$route.params.subjectId, record)
-        .then(response => {
-          this.$emit('get-audio-url', response.audio_url)
-        })
-        .catch(error => {
-          console.log(error)
-        })
     }
-
   }
 }
 </script>
