@@ -59,7 +59,7 @@ export default {
     }
 
     .main-left {
-      flex: 50%;
+      flex: 1;
       padding: 10px;
       width: 360px;
       .subject-content {
@@ -70,7 +70,7 @@ export default {
     }
 
     .main-right {
-      flex: 50%;
+      flex: 1;
       padding: 10px;
       text-align: center;
       .record-controller {
