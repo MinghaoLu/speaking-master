@@ -9,7 +9,7 @@
 
     <div class="main-right">
       <div class="record-controller">
-          <recorder v-on:get-audio="getAudio" ></recorder>
+          <recorder v-on:record-completed="handleNewRecord(blob, fileName)" ></recorder>
       </div>
 
       <div class="record-text-component">
@@ -47,7 +47,7 @@ export default {
         audioUrl: this.audio_url
       })
     },
-    getAudio: function (blob, fileName) {
+    handleNewRecord: function (blob, fileName) {
       console.log('getAudio:' + blob)
       let record = new File([blob], fileName)
       this.uploadRecord(record)

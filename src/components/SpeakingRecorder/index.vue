@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button ref="recordBtn" id="btnStart" @click="startRecording">record</button>
-    <button ref="stopBtn" id="btnStop" @click="stopRecording" disabled>stop</button>
+    <button ref="recordBtn" :disabled="start" @click="startRecording">record</button>
+    <button ref="stopBtn" :disabled="stop" @click="stopRecording">stop</button>
 
     <h2>Recordings</h2>
     <ul id="recordings-list">
@@ -16,11 +16,12 @@ import Recorder from './recorder.js'
 export default {
   name: 'recorder',
   props: {
-
   },
   data () {
     return {
-      recorder: null
+      recorder: null,
+      start: null,
+      stop: 'disabled'
     }
   },
   computed: {
@@ -47,19 +48,15 @@ export default {
   },
   methods: {
     startRecording () {
-      document.getElementById('btnStart').setAttribute('disabled', 'disabled')
-      document.getElementById('btnStop').removeAttribute('disabled')
+      this.start = 'disabled'
+      this.stop = null
       this.recorder && this.recorder.record()
-      // this.$refs['recordBtn'].disabled = true
-      // this.$refs['recordBtn'].nextElementSibling.disabled = false
       console.log('Recording...')
     },
     stopRecording (button) {
-      document.getElementById('btnStart').removeAttribute('disabled')
-      document.getElementById('btnStop').setAttribute('disabled', 'disabled')
+      this.stop = 'disabled'
+      this.start = null
       this.recorder && this.recorder.stop()
-      // this.$refs['stopBtn'].disabled = true
-      // this.$refs['stopBtn'].previousElementSibling.disabled = false
       console.log('Stopped recording.')
       this.createDownloadLink()
     },
@@ -81,7 +78,7 @@ export default {
         document.getElementById('recordingslist').appendChild(li)
 
         // deliver to parent
-        _self.$emit('get-audio', blob, hf.download)
+        _self.$emit('record-completed', blob, hf.download)
       })
     },
     startUserMedia (stream) {
