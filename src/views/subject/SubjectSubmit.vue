@@ -9,7 +9,7 @@
 
     <div class="main-right">
       <div class="record-controller">
-          录音controller
+          <recorder></recorder>
       </div>
 
       <div class="record-text-component">
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Recorder from '@/components/SpeakingRecorder'
 import { getSubjectById, publishSubmission } from 'api/subjects'
 
 export default {
@@ -35,22 +36,15 @@ export default {
     }
   },
   components: {
-
+    Recorder
   },
   computed: {},
   methods: {
     publish () {
-      console.log('publish')
       publishSubmission(this.$route.params.subjectId, {
         content: 'test',
         audioUrl: 'test'
       })
-        .then(response => {
-          this.audio_url = response.audio_url
-        })
-        .catch(error => {
-          console.log(error)
-        })
     }
   },
   async mounted () {
@@ -82,10 +76,9 @@ export default {
       padding: 10px;
       text-align: center;
       .record-controller {
-        height: 80px;
-        overflow: auto;
+        /* overflow: auto;
         background: #EBEBEB;
-        border: 2px solid #AAA;
+        border: 2px solid #AAA; */
       }
       .record-text-component {
         height: 240px;

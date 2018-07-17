@@ -12,6 +12,7 @@
 
 <script>
 import Recorder from './recorder.js'
+import { uploadFile } from 'api/subjects'
 export default {
   name: 'recorder',
   props: {
@@ -19,7 +20,8 @@ export default {
   },
   data () {
     return {
-      recorder: null
+      recorder: null,
+      audio_url: ''
     }
   },
   computed: {
@@ -81,6 +83,16 @@ export default {
 
       this.recorder = new Recorder(input)
       console.log('Recorder initialised.')
+    },
+    // upload the record to the server and return audio_rul
+    uploadRecord: function (record) {
+      uploadFile(this.$route.params.subjectId, record)
+        .then(response => {
+          this.audio_url = response.audio_url
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
 
   }

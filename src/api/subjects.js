@@ -8,6 +8,20 @@ export function getSubjectById (id) {
   })
 }
 
+export function uploadFile (id, file) {
+  let formData = new FormData()
+  formData.append('file', file)
+
+  return fetch({
+    url: `/subjects/${id}/submissions`,
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: formData
+  })
+}
+
 export function publishSubmission (id, {content, audioUrl}) {
   const data = {
     content: content,
