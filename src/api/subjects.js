@@ -8,7 +8,7 @@ export function getSubjectById (id) {
   })
 }
 
-export function uploadFile (id, file, url) {
+export function uploadFile (id, file) {
   let formData = new FormData()
   formData.append('file', file)
 
